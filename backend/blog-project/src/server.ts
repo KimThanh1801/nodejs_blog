@@ -1,11 +1,32 @@
+import "reflect-metadata";
 import express from "express";
-import routes from "./routes/index.js";
+import cors from "cors";
+import helmet from "helmet";
+import compression from "compression";
+import dotenv from "dotenv";
+// import routes from "./routes";
+import routes from "./routes";
+
+
+dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 8080;
+
+app.use(helmet());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "*",
+    credentials: true,
+  })
+);
+app.use(compression());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.use("/api", routes);
 
-const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

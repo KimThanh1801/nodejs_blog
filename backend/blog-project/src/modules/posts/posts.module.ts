@@ -1,10 +1,9 @@
-import * as postController from './posts.controller.js';
-import * as postService from './posts.service.js';
+import { PostController } from "./posts.controller";
+import { PostService } from "./posts.service";
 
-const PostModule = {
-  controller: postController,
-  service: postService,
-};
+const PostsModule =  {
+  controller: PostController,
+  service: PostService,
+}
 
-
-export default PostModule;
+export default PostsModule;

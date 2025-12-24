@@ -16,21 +16,43 @@ datasource db {
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  name      String?
+  name      String
+  posts     Post[]
+  comments  Comment[]
+  likes     Like[]
+  role      String
   password  String
-  posts     Post[]   // 👈 thêm quan hệ ngược
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  posts     Post[] // <-- thêm dòng này
 }
 
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
-  content   String
+  content   String?
   published Boolean  @default(false)
   authorId  Int
   author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  comments  Comment[]
+  likes     Like[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
 }

@@ -1,6 +1,6 @@
 // prisma/seeds/users.ts
 
-import extension = require("@prisma/client/extension");
+import extension from "@prisma/client/extension";
 
 const prisma = new extension.PrismaClient(); // tạo client
 

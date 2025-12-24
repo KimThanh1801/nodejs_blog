@@ -1,15 +1,15 @@
 import { Router } from "express";
 
-import userRoutes from "./user.routes.js";
-import postRoutes from "./post.routes.js";
+import userRoutes from "./user.routes";
+import postRoutes from "./post.routes";
 
-const router = Router();
+const routers = Router();
 
 // router.use("/auth", authRoutes);
-router.use("/users", userRoutes);
-router.use("/posts", postRoutes);
+routers.use("/users", userRoutes);
+routers.use("/posts", postRoutes);
 
-router.get("/health", (req, res) => {
+routers.get("/health", (req, res) => {
   res.json({
     status: "success",
     message: "API is running",
@@ -20,4 +20,4 @@ router.get("/health", (req, res) => {
   });
 });
 
-export default router;
+export default routers;

@@ -1,4 +1,4 @@
-import { CreateUserDto } from "./dto/users.dto.js";
+import { CreateUserDto } from "./dto/users.dto";
 
 interface User {
   id: number;

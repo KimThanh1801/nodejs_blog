@@ -1,2 +1,3 @@
-export * from './updatePostDto.js';
-export * from './createPostDto.js';
+export * from "./request";
+export * from "./response";
+
