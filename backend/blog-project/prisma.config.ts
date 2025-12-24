@@ -1,13 +1,13 @@
-import "dotenv/config";            // load biến môi trường từ .env
+import "dotenv/config";
 import { defineConfig } from 'prisma/config';
 
-
 export default defineConfig({
-  schema: "prisma/schema.prisma", // đường dẫn tới schema Prisma
-  migrations: {
-    path: "prisma/migrations",    // nơi lưu migration
-  },
+  schema: "prisma/schema.prisma",
+  migrations: { path: "prisma/migrations" },
   datasource: {
-    url: process.env.DATABASE_URL, // lấy URL database từ .env
-  },
+    default: {
+      adapter: "postgresql",
+      url: process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/mydb"
+    }
+  }
 });
