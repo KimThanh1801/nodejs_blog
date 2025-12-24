@@ -21,12 +21,13 @@ model User {
   posts     Post[]   // 👈 thêm quan hệ ngược
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  posts     Post[] // <-- thêm dòng này
 }
 
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
-  content   String?
+  content   String
   published Boolean  @default(false)
   authorId  Int
   author    User     @relation(fields: [authorId], references: [id])

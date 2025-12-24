@@ -1,12 +1,5 @@
-import * as userController from './users.controller';
-import * as userService from './users.service';
-import { CreateUserDto } from './dto/users.dto';
+import { usersController } from "./users.controller.js";
 
-// Gom tất cả vào một object để export
-const UserModule = {
-  controller: userController,
-  service: userService,
+export const UsersModule = {
+  controller: usersController,
 };
-
-export { CreateUserDto };
-export default UserModule;

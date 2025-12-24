@@ -175,15 +175,15 @@ export interface Comment {
 }
 
 export interface Post {
-  id: number;
-  userId: number;
-  content: string;
-  createdAt: string;
-  image?: string;
-  emoji?: string;
-  comments?: Comment[];
-  likes?: number;
-  shares?: number;
+    id: number;
+    userId: number;
+    content: string;
+    createdAt: string;
+    image?: string;
+    emoji?: string;
+    comments?: Comment[];
+    likes?: number;
+    shares?: number;
 }
 
 const BASE_URL = "http://localhost:3000";
@@ -195,11 +195,7 @@ export async function getPosts(): Promise<Post[]> {
     return data;
 }
 
-export async function createPost(
-    data: CreatePostDto,
-    file?: File,
-    emoji?: string
-): Promise<Post> {
+export async function createPost(data: CreatePostDto, file?: File, emoji?: string): Promise<Post> {
     const formData = new FormData();
     formData.append("userId", data.userId.toString());
     formData.append("content", data.content);
@@ -215,13 +211,10 @@ export async function createPost(
     if (!response.ok) throw new Error(dataRes.message || "Tạo bài viết thất bại");
     return dataRes;
 }
+
 /* ===== Chỉnh sửa bài viết ===== */
-export async function editPost(
-    postId: number,
-    content?: string,
-    file?: File,
-    emoji?: string
-): Promise<Post> {
+export async function editPost(postId: number, content?: string, file?: File, emoji?: string)
+    : Promise<Post> {
     const formData = new FormData();
     if (content !== undefined) formData.append("content", content); // content phải là string
     if (file) formData.append("image", file);
@@ -239,7 +232,8 @@ export async function editPost(
 
 
 /* ===== Xóa bài viết ===== */
-export async function deletePost(postId: number): Promise<{ message: string; post: Post }> {
+export async function deletePost(postId: number)
+    : Promise<{ message: string; post: Post }> {
     const response = await fetch(`${BASE_URL}/posts/${postId}`, {
         method: "DELETE",
     });
@@ -258,7 +252,8 @@ export async function likePost(postId: number): Promise<{ likes: number }> {
 }
 
 
-export async function commentPost(postId: number, author: string, content: string): Promise<Comment> {
+export async function commentPost(postId: number, author: string, content: string)
+    : Promise<Comment> {
     const response = await fetch(`${BASE_URL}/posts/${postId}/comments`, { // sửa lại 'comments'
         method: "POST",
         headers: { "Content-Type": "application/json" },

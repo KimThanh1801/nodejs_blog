@@ -1,35 +1,27 @@
-import { PrismaClient } from '@prisma/client/extension';
-import bcrypt from 'bcryptjs';
-import { CreateUserDto } from './users.module';
+import { CreateUserDto } from "./dto/users.dto.js";
 
-const prisma = new PrismaClient();
+interface User {
+  id: number;
+  fullName: string;
+  email: string;
+  password: string;
+}
 
-export const userService = {
-  create: async (data: CreateUserDto) => {
-    // Mã hóa password
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+export class UsersService {
+  private users: User[] = [];
+  private idCounter = 1;
 
-    // Tạo user mới trong database
-    const user = await prisma.user.create({
-      data: {
-        name: data.name,
-        email: data.email,
-        password: hashedPassword,
-      },
-    });
+  create(userDto: CreateUserDto) {
+    const newUser: User = { id: this.idCounter++, ...userDto };
+    this.users.push(newUser);
+    return newUser;
+  }
 
-    // Trả về user (có thể loại bỏ password trước khi return)
-    const { password, ...result } = user;
-    return result;
-  },
+  findAll() {
+    return this.users;
+  }
 
-  findAll: async () => {
-    return prisma.user.findMany({
-      select: { id: true, name: true, email: true }
-    });
-  },
-
-  findById: async (id: number) => {
-    return prisma.user.findUnique({ where: { id } });
-  },
-};
+  findByEmail(email: string) {
+    return this.users.find(u => u.email === email);
+  }
+}
