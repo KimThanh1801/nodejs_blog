@@ -4,7 +4,7 @@
   "description": "Source base chuẩn cho training intern - Node.js Backend với PostgreSQL",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/server.ts",
+    "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "start": "node src/server.js",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/config/database.ts",
