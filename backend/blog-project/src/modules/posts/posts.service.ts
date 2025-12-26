@@ -5,7 +5,7 @@ export class PostService {
   static create(data: {
     title: string;
     content?: string;
-    emoji: string;
+    emoji?: string;
     image?: string;
     authorId: number;
     published?: boolean;
