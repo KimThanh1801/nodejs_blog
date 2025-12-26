@@ -1,10 +1,10 @@
 import express from "express";
 import cors from "cors";
-import usersRouter from "./routes/users.routes.js";
+import usersRouter from "./routes/user.routes";
 
 const app = express();
 
-// CORS
+// CO
 app.use(cors({
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
