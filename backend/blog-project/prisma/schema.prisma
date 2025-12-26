@@ -28,6 +28,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   title     String
   content   String?
+  emoji     String?
   published Boolean  @default(false)
   image     String?
   authorId  Int
