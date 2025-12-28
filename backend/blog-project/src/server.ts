@@ -1,33 +1,27 @@
-import "reflect-metadata";
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
-import compression from "compression";
-import dotenv from "dotenv";
-// import routes from "./routes";
-import routes from "./routes";
-
-
-dotenv.config();
-
+import usersRouter from "./routes/user.routes";
+import postRouter from "./routes/post.routes";
+import path from "path";
+import likePost from './routes/like.route';
+import commentPost from "./routes/comment.route";
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(helmet());
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN || "*",
-    credentials: true,
-  })
-);
-app.use(compression());
+// CORS
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
+}));
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// Route chính
+app.use("/users", usersRouter);
+app.use("/posts", postRouter);
+app.use("/posts", likePost);
+app.use("/posts", commentPost);
+app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
 
-// app.use("/api", routes);
-app.use("/", routes);
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+app.listen(5000, () => console.log("Server chạy cổng 5000"));

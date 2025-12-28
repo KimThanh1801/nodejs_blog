@@ -3,9 +3,9 @@ import { Router } from "express";
 
 const router = Router()
 
-const commentCotroller  = CommentModule.controller;
+const commentCotroller = CommentModule.controller;
 
-router.post('/comments', commentCotroller.create);
-router.get('/posts/:postId/comments', commentCotroller.getByPost);
+router.post('/:postId/comments', commentCotroller.create);
+router.get('/:postId/comments', commentCotroller.getByPost);
 
 export default router;

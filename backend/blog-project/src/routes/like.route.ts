@@ -3,9 +3,9 @@ import { Router } from 'express';
 
 const router = Router();
 
-const likeController = LikeModule.controller; 
+const likeController = LikeModule.controller;
 
-router.post('/posts/:postId/like', likeController.like);
-router.delete('/posts/:postId/like', likeController.unlike);
+router.post('/:postId/like', likeController.like);
+router.delete('/:postId/like', likeController.unlike);
 
 export default router;
