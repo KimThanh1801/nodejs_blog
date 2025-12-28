@@ -1,19 +1,19 @@
-import express from "express";
-import cors from "cors";
-import usersRouter from "./routes/user.routes";
+// import express from "express";
+// import cors from "cors";
+// import usersRouter from "./routes/user.routes";
 
-const app = express();
+// const app = express();
 
-// CO
-app.use(cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true
-}));
+// // CORS
+// app.use(cors({
+//     origin: "http://localhost:5173",
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     credentials: true
+// }));
 
-app.use(express.json());
+// app.use(express.json());
 
-// Route chính
-app.use("/users", usersRouter);
+// // Route chính
+// app.use("/users", usersRouter);
 
-app.listen(5000, () => console.log("Server chạy cổng 5000"));
+// app.listen(5000, () => console.log("Server chạy cổng 5000"));

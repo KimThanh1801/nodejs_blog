@@ -1,171 +1,5 @@
-// // export interface CreatePostDto {
-// //     userId: number;
-// //     content: string;
+import { axiosClient } from "./axiosClient";
 
-// // }
-
-// // export interface Comment {
-// //     id: number;
-// //     author: string;
-// //     content: string;
-// // }
-
-// // export interface Post {
-// //     id: number;
-// //     userId: number;
-// //     content: string;
-// //     createdAt: string;
-// //     likes: number;
-// //     shares: number;
-// //     comments: Comment[];
-// //     image?: string; // thêm image
-// //     emoji?: string;
-// // }
-
-// // const BASE_URL = "http://localhost:3000";
-
-// // /* ===== Lấy danh sách bài viết ===== */
-// // export async function getPosts(): Promise<Post[]> {
-// //     const response = await fetch(`${BASE_URL}/posts`);
-// //     const data = await response.json();
-// //     if (!response.ok) throw new Error(data.message || "Lấy bài viết thất bại");
-// //     return data;
-// // }
-
-// // /* ===== Tạo bài viết mới ===== */
-// // export async function createPost(data: CreatePostDto, file?: File): Promise<Post> {
-// //     const formData = new FormData();
-// //     formData.append("userId", data.userId.toString());
-// //     formData.append("content", data.content);
-
-// //     if (file) {
-// //         formData.append("image", file); // file sẽ được gửi dạng multipart/form-data
-// //     }
-
-// //     const response = await fetch(`${BASE_URL}/posts`, {
-// //         method: "POST",
-// //         body: formData, // lưu ý không cần headers Content-Type, browser tự set
-// //     });
-
-// //     const dataRes = await response.json();
-// //     if (!response.ok) throw new Error(dataRes.message || "Tạo bài viết thất bại");
-// //     return dataRes;
-// // }
-
-
-// // /* ===== Thích bài viết ===== */
-// // export async function likePost(postId: number): Promise<{ likes: number }> {
-// //     const response = await fetch(`${BASE_URL}/posts/${postId}/like`, { method: "POST" });
-// //     const data = await response.json();
-// //     if (!response.ok) throw new Error(data.message || "Thích bài viết thất bại");
-// //     return data;
-// // }
-
-// // /* ===== Thêm bình luận ===== */
-// // export async function commentPost(postId: number, author: string, content: string): Promise<Comment> {
-// //     const response = await fetch(`${BASE_URL}/posts/${postId}/comment`, {
-// //         method: "POST",
-// //         headers: { "Content-Type": "application/json" },
-// //         body: JSON.stringify({ author, content }),
-// //     });
-// //     const data = await response.json();
-// //     if (!response.ok) throw new Error(data.message || "Thêm bình luận thất bại");
-// //     return data;
-// // }
-
-
-
-// export interface CreatePostDto {
-//     userId: number;
-//     content: string;
-// }
-
-// export interface Post {
-//     id: number;
-//     userId: number;
-//     content: string;
-//     createdAt: string;
-//     image?: string;
-//     emoji?: string;
-//     comments?: Comment[];
-//     likes?: number;
-//     shares?: number;
-// }
-
-// export interface Comment {
-//     id: number;
-//     author: string;
-//     content: string;
-//     createdAt: string;
-// }
-
-// interface CommentInput {
-//     author: string;
-//     content: string;
-// }
-
-// const BASE_URL = "http://localhost:3000";
-
-// /* ===== Lấy danh sách bài viết ===== */
-// export async function getPosts(): Promise<Post[]> {
-//     const response = await fetch(`${BASE_URL}/posts`);
-//     const data = await response.json();
-//     if (!response.ok) throw new Error(data.message || "Lấy bài viết thất bại");
-//     return data;
-// }
-
-// /* ===== Tạo bài viết mới ===== */
-// export async function createPost(
-//     data: CreatePostDto,
-//     file?: File,
-//     emoji?: string
-// ): Promise<Post> {
-//     const formData = new FormData();
-//     formData.append("userId", data.userId.toString());
-//     formData.append("content", data.content);
-//     if (file) formData.append("image", file);
-//     if (emoji) formData.append("emoji", emoji);
-
-//     const response = await fetch(`${BASE_URL}/posts`, {
-//         method: "POST",
-//         body: formData,
-//     });
-
-//     const dataRes = await response.json();
-//     if (!response.ok) throw new Error(dataRes.message || "Tạo bài viết thất bại");
-//     return dataRes;
-// }
-
-// /* ===== Thêm bình luận ===== */
-// export async function commentPost(
-//     postId: number,
-//     author: string,
-//     content: string
-// ): Promise<Comment> {
-//     const response = await fetch(`${BASE_URL}/posts/${postId}/comment`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ author, content }),
-//     });
-
-//     const data = await response.json();
-//     if (!response.ok) throw new Error(data.message || "Thêm bình luận thất bại");
-//     return data;
-// }
-
-// /* ===== Lấy bình luận ===== */
-// export async function getComments(postId: number): Promise<Comment[]> {
-//     const response = await fetch(`${BASE_URL}/posts/${postId}/comments`);
-//     const data = await response.json();
-//     if (!response.ok) throw new Error(data.message || "Lấy bình luận thất bại");
-//     return data;
-// }
-
-
-export interface CreatePostDto {
-    userId: number;
-    content: string;
-}
 
 export interface Comment {
     id: number;
@@ -178,97 +12,74 @@ export interface Post {
     id: number;
     userId: number;
     content: string;
-    createdAt: string;
     image?: string;
     emoji?: string;
+    createdAt: string;
     comments?: Comment[];
     likes?: number;
     shares?: number;
+    title?: string;
 }
 
-const BASE_URL = "http://localhost:3000";
+/* ===== LẤY BÀI VIẾT ===== */
+export const getPosts = async () => {
+  const res = await axiosClient.get("/posts");
+  return res.data;
+};
 
-export async function getPosts(): Promise<Post[]> {
-    const response = await fetch(`${BASE_URL}/posts`);
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || "Lấy bài viết thất bại");
-    return data;
-}
+/* ===== TẠO BÀI VIẾT ===== */
+export const createPost = async (
+  data: { userId: number; content: string },
+  image?: File,
+  emoji?: string
+) => {
+  const formData = new FormData();
+  formData.append("userId", String(data.userId));
+  formData.append("content", data.content);
+  if (emoji) formData.append("emoji", emoji);
+  if (image) formData.append("image", image);
 
-export async function createPost(data: CreatePostDto, file?: File, emoji?: string): Promise<Post> {
-    const formData = new FormData();
-    formData.append("userId", data.userId.toString());
-    formData.append("content", data.content);
-    if (file) formData.append("image", file);
-    if (emoji) formData.append("emoji", emoji);
+  const res = await axiosClient.post("/posts", formData);
+  return res.data;
+};
 
-    const response = await fetch(`${BASE_URL}/posts`, {
-        method: "POST",
-        body: formData,
-    });
+/* ===== SỬA ===== */
+export const editPost = async (
+  postId: number,
+  content: string,
+  image?: File,
+  emoji?: string
+) => {
+  const formData = new FormData();
+  formData.append("content", content);
+  if (emoji) formData.append("emoji", emoji);
+  if (image) formData.append("image", image);
 
-    const dataRes = await response.json();
-    if (!response.ok) throw new Error(dataRes.message || "Tạo bài viết thất bại");
-    return dataRes;
-}
+  const res = await axiosClient.put(`/posts/${postId}`, formData);
+  return res.data;
+};
 
-/* ===== Chỉnh sửa bài viết ===== */
-export async function editPost(postId: number, content?: string, file?: File, emoji?: string)
-    : Promise<Post> {
-    const formData = new FormData();
-    if (content !== undefined) formData.append("content", content); // content phải là string
-    if (file) formData.append("image", file);
-    if (emoji) formData.append("emoji", emoji);
+/* ===== XÓA ===== */
+export const deletePost = async (postId: number) => {
+  const res = await axiosClient.delete(`/posts/${postId}`);
+  return res.data;
+};
 
-    const response = await fetch(`${BASE_URL}/posts/${postId}`, {
-        method: "PUT",
-        body: formData,
-    });
+/* ===== COMMENT ===== */
+export const commentPost = async (postId: number, content: string) => {
+  const res = await axiosClient.post(
+    `/posts/${postId}/comments`,
+    { content }
+  );
+  return res.data;
+};
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || "Chỉnh sửa bài viết thất bại");
-    return data;
-}
+export const getComments = async (postId: number) => {
+  const res = await axiosClient.get(`/posts/${postId}/comments`);
+  return res.data;
+};
 
-
-/* ===== Xóa bài viết ===== */
-export async function deletePost(postId: number)
-    : Promise<{ message: string; post: Post }> {
-    const response = await fetch(`${BASE_URL}/posts/${postId}`, {
-        method: "DELETE",
-    });
-
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || "Xóa bài viết thất bại");
-    return data;
-}
-
-/* ===== Thích bài viết ===== */
-export async function likePost(postId: number): Promise<{ likes: number }> {
-    const response = await fetch(`${BASE_URL}/posts/${postId}/like`, { method: "POST" });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || "Thích bài viết thất bại");
-    return data;
-}
-
-
-export async function commentPost(postId: number, author: string, content: string)
-    : Promise<Comment> {
-    const response = await fetch(`${BASE_URL}/posts/${postId}/comments`, { // sửa lại 'comments'
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ author, content }),
-    });
-
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || "Thêm bình luận thất bại");
-    return data;
-}
-
-
-export async function getComments(postId: number): Promise<Comment[]> {
-    const response = await fetch(`${BASE_URL}/posts/${postId}/comments`);
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || "Lấy bình luận thất bại");
-    return data;
-}
+export const likePost = async (postId: number) => {
+  const res = await axiosClient.post(`/posts/${postId}/like`);
+  return res.data;
+};

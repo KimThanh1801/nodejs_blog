@@ -12,6 +12,7 @@ interface Props {
 }
 export default function CreatePostPageModal({ visible, onClose, postToEdit, onPostCreated }: Props) {
   const [postContent, setPostContent] = useState("");
+  const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -21,35 +22,36 @@ export default function CreatePostPageModal({ visible, onClose, postToEdit, onPo
   const emojis = ["😀", "😍", "😢", "😎", "🎉", "💖", "🔥", "👏", "🥳"];
   useEffect(() => {
     if (postToEdit) {
+      setTitle(postToEdit.title || "");
       setPostContent(postToEdit.content || "");
       setSelectedEmoji(postToEdit.emoji || "");
       setImagePreview(postToEdit.image || null);
       setSelectedImage(null);
     } else {
+      setTitle("");
       setPostContent("");
       setSelectedEmoji("");
       setImagePreview(null);
       setSelectedImage(null);
     }
   }, [postToEdit]);
+
   const handlePost = async () => {
     if (!postContent.trim() && !selectedEmoji && !selectedImage && !imagePreview) return;
     setLoading(true);
+
     try {
-      const content = postContent + (selectedEmoji || "");
+      // Chỉ gửi file mới nếu có
+      const imageToSend = selectedImage || undefined;
+
       if (postToEdit) {
-        await editPost(
-          postToEdit.id,
-          postContent,
-          selectedImage || undefined,
-          selectedEmoji
-        );
+        await editPost(postToEdit.id, postContent, imageToSend, selectedEmoji);
         message.success("Cập nhật bài viết thành công");
-      }
-      else {
-        await createPost({ userId: 1, content }, selectedImage || undefined, selectedEmoji);
+      } else {
+        await createPost({ userId: 1, content: postContent }, selectedImage || undefined, selectedEmoji);
         message.success("Đăng bài viết thành công");
       }
+
       onClose();
       onPostCreated?.();
     } catch (err: any) {
@@ -58,6 +60,7 @@ export default function CreatePostPageModal({ visible, onClose, postToEdit, onPo
       setLoading(false);
     }
   };
+
   const handleImageClick = () => imageInputRef.current?.click();
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -69,6 +72,7 @@ export default function CreatePostPageModal({ visible, onClose, postToEdit, onPo
   return (
     <Modal open={visible} onCancel={onClose} footer={null} width={600} centered style={{ borderRadius: 12 }}>
       <div style={{ padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #f0f0f0" }}>
+
         <Text strong style={{ fontSize: 18 }}>{postToEdit ? "Chỉnh sửa bài viết" : "Tạo bài viết"}</Text>
         <Button type="primary" loading={loading} disabled={!postContent.trim() && !selectedEmoji && !selectedImage && !imagePreview} onClick={handlePost}>
           {postToEdit ? "Lưu" : "Đăng"}
@@ -83,6 +87,19 @@ export default function CreatePostPageModal({ visible, onClose, postToEdit, onPo
       </div>
       <Divider style={{ margin: 0 }} />
       <div style={{ padding: 16 }}>
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Tiêu đề bài viết"
+          style={{
+            width: "100%",
+            fontSize: 18,
+            fontWeight: 500,
+            border: "none",
+            outline: "none",
+            marginBottom: 12
+          }}
+        />
         <textarea
           value={postContent}
           onChange={(e) => setPostContent(e.target.value)}
@@ -90,7 +107,19 @@ export default function CreatePostPageModal({ visible, onClose, postToEdit, onPo
           autoFocus
           style={{ width: "100%", minHeight: 120, border: "none", resize: "none", fontSize: 16, outline: "none" }}
         />
-        {imagePreview && <img src={imagePreview} alt="preview" style={{ width: "100%", borderRadius: 8, marginTop: 8 }} />}
+        {imagePreview && (
+          <img
+            src={imagePreview}
+            alt="preview"
+            style={{
+              width: "50%",
+              maxHeight: 250,
+              objectFit: "cover",
+              borderRadius: 8,
+              marginTop: 8,
+            }}
+          />
+        )}
         {selectedEmoji && <div style={{ fontSize: 24, marginTop: 8 }}>{selectedEmoji}</div>}
       </div>
       <Divider style={{ margin: 0 }} />
