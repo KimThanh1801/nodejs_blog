@@ -2,13 +2,18 @@ import prisma from '../../config/database';
 
 export class PostService {
   static create(data: {
-    title: string;
+    title?: string;
     content?: string;
     image?: string;
     authorId: number;
   }) {
     return prisma.post.create({
-      data,
+      data: {
+        title: data.title ?? 'Bài viết mới',
+        content: data.content,
+        image: data.image,
+        authorId: data.authorId,
+      },
     });
   }
 
@@ -18,6 +23,9 @@ export class PostService {
         author: true,
         comments: true,
         likes: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
   }
@@ -33,16 +41,36 @@ export class PostService {
     });
   }
 
-  static update(id: number, data: any) {
+  static update(
+    id: number,
+    data: {
+      title?: string;
+      content?: string;
+      image?: string | null;
+    }
+  ) {
     return prisma.post.update({
       where: { id },
-      data,
+      data: {
+        title: data.title,
+        content: data.content,
+        image: data.image,
+      },
     });
   }
 
-  static delete(id: number) {
+  static async delete(id: number) {
+    await prisma.comment.deleteMany({
+      where: { postId: id },
+    });
+
+    await prisma.like.deleteMany({
+      where: { postId: id },
+    });
+
     return prisma.post.delete({
       where: { id },
     });
   }
+
 }

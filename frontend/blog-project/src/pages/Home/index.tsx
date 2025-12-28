@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CreatePost from "../../core/components/blog/CreatePost";
 import CreatePostPageModal from "../../core/components/blog/CreatePostPage";
-import { PostCard } from "../../core/components/blog/PostCard";
+import PostCard from "../../core/components/blog/PostCard"; // default import
 import { Spin, message } from "antd";
 import { getPosts, type Post } from "../../api/postAPI";
 
@@ -15,24 +15,26 @@ export default function Home() {
     setLoading(true);
     try {
       const data = await getPosts();
-      setPosts(data);
+      const postsArray = Array.isArray(data) ? data : [];
+      const normalized = postsArray.map(post => ({
+        ...post,
+        likes: typeof post.likes === "number" ? post.likes : 0,
+        shares: typeof post.shares === "number" ? post.shares : 0,
+        comments: Array.isArray(post.comments) ? post.comments : [],
+      }));
+      setPosts(normalized);
     } catch (err: any) {
       message.error(err.message || "Lỗi khi tải bài viết");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
 
   useEffect(() => { fetchPosts(); }, []);
 
-  const handleEdit = (post: Post) => {
-    setEditingPost(post);
-    setShowModal(true);
-  };
-
-  const handleModalClose = () => {
-    setEditingPost(null);
-    setShowModal(false);
-  };
+  const handleEdit = (post: Post) => { setEditingPost(post); setShowModal(true); };
+  const handleModalClose = () => { setEditingPost(null); setShowModal(false); };
 
   if (loading) return <Spin tip="Đang tải bài viết..." />;
 
@@ -42,7 +44,7 @@ export default function Home() {
         <CreatePost onPostCreated={fetchPosts} />
 
         <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 16 }}>
-          {posts.map((post) => (
+          {posts.map(post => (
             <PostCard
               key={post.id}
               postId={post.id}
@@ -59,17 +61,12 @@ export default function Home() {
               image={post.image}
               emoji={post.emoji}
               onEdit={() => handleEdit(post)}
-              onDelete={(id) => setPosts((prev) => prev.filter((p) => p.id !== id))}
+              onDelete={id => setPosts(prev => prev.filter(p => p.id !== id))}
             />
           ))}
         </div>
 
-        <CreatePostPageModal
-          visible={showModal}
-          onClose={handleModalClose}
-          postToEdit={editingPost}
-          onPostCreated={fetchPosts}
-        />
+        <CreatePostPageModal visible={showModal} onClose={handleModalClose} postToEdit={editingPost} onPostCreated={fetchPosts} />
       </main>
     </div>
   );
